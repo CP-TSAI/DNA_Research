@@ -1,0 +1,9 @@
+- input: nxn table
+
+- 70% training/ 30% testing
+
+- race to race (inter/intra) -> distance is convincible, good "K" value (prove data is 集中)
+
+- K=???
+
+- race predict
