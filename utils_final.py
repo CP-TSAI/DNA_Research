@@ -318,6 +318,61 @@ def index2race(index):
         print("error index in index2race(): ")
         time.sleep(5)
 
+
+
+
+def k_nearest_distance(df, K):
+    original_class_array = []
+    predicted_class_array = []
+
+    original_race_array = []
+    predicted_race_array = []
+
+    for i in range(0, df.shape[0]):
+
+        # visualize the process
+        # clear_output(wait=True)
+        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+
+        neighborClassType = []
+        original_class = utils_final.class2index(utils_final.fullName2Class(df.loc[i][0]))
+        original_race = utils_final.index2race(original_class)
+
+        original_class_array.append(original_class)
+        original_race_array.append(original_race)
+
+        j = 1
+        cnt = 1
+        previous_distance = df.loc[i][2*j]
+        
+        while (cnt <= K and cnt < 10):
+
+            # MARK: if running out data before we get enough k, errors could happen,
+            # so need to have a size checker
+            if (df.shape[1] <= 2*j+1): break
+
+            if (previous_distance != df.loc[i][2*j]):
+                previous_distance = df.loc[i][2*j]
+                cnt += 1
+            
+            if (cnt <= K):
+                neighborClassType.append(utils_final.class2index(utils_final.fullName2Class(df.loc[i][2*j-1])))
+            j += 1
+
+        
+        # get the most frequent element
+
+        predicted_class = utils_final.getMostFrequentNum(neighborClassType)
+        predict_race = utils_final.index2race(predicted_class)
+
+        predicted_class_array.append(predicted_class)
+        predicted_race_array.append(predict_race)
+
+        # print("neighborClassType: ", neighborClassType)
+        # time.sleep(10)
+
+    return original_class_array, predicted_class_array, original_race_array, predicted_race_array
+
 # get K neighbors from df (DataFrame)
 ###Wrong!!!
 
@@ -397,13 +452,14 @@ def k_weighted_nearest_neighbor(df, K):
             else:
                 if (j % 2 == 1): # get classType
                     RaceUnitVector = utils_final.race2unitVector(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j]))))
+                    print(RaceUnitVector)
                 else: # get distance information
                     distance = df.loc[i][j]
                     if (distance == 0):
                         distance = 0.00000001
 
                     # add the lists element-wisely 
-                    predicted_vector = list( map(add, predicted_vector, [i * (1/distance) for i in RaceUnitVector] ) ) #EX:predicted_vector=[1000,0,0]
+                    predicted_vector = list( map(add, predicted_vector, [k * (1/distance) for k in RaceUnitVector] ) ) #EX:predicted_vector=[1000,0,0]
                     print(predicted_vector)
 
         # get the max idx in the predicted_result
@@ -778,3 +834,5 @@ def create_training_testing_data(df, training_percent, testing_percent):
     df_training = df.sample(frac = training_percent, replace = True)
     df_testing = df.sample(frac = testing_percent, replace = True)
     return df_training, df_testing
+
+
