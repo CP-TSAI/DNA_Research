@@ -373,6 +373,67 @@ def k_nearest_distance(df, K):
 
     return original_class_array, predicted_class_array, original_race_array, predicted_race_array
 
+
+
+
+
+# predict by K nearest weighted (by distance) neighbor
+def k_weighted_nearest_distance(df, K):
+    original_class_array = []
+    predicted_class_array = []
+    for i in range(0, df.shape[0]):
+
+        # visualize the process
+        clear_output(wait=True)
+        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+        
+        original_class = utils_final.class2index(utils_final.fullName2Class(df.loc[i][0]))
+        original_class_array.append(original_class)
+        j = 1
+        cnt = 1
+        previous_distance = df.loc[i][2*j]
+        predicted_vector = [0] * 35
+
+        while (cnt <= K  and cnt < 10):
+            # MARK: if running out data before we get enough k, errors could happen,
+            # so need to have a size checker
+            if (df.shape[1] <= 2*j+1): break
+
+            if (previous_distance != df.loc[i][2*j]):
+                previous_distance = df.loc[i][2*j]
+                cnt += 1
+
+            classTypeUnitVector = utils_final.class2unitVector(utils_final.fullName2Class(df.loc[i][2*j-1]))
+            distance = df.loc[i][2*j]
+            if (distance == 0):
+                distance = 0.00000001
+
+            # add the lists element-wisely
+            predicted_vector = list( map(add, predicted_vector, [i * (1/distance) for i in classTypeUnitVector] ) )
+            j += 1
+                    
+
+        # get the max idx in the predicted_result
+        # print(predicted_vector)
+        predicted_class = predicted_vector.index(max(predicted_vector))
+        predicted_class_array.append(predicted_class)
+
+
+        
+
+    return original_class_array, predicted_class_array
+
+
+
+
+
+
+
+
+
+
+
+
 # get K neighbors from df (DataFrame)
 ###Wrong!!!
 
@@ -827,12 +888,13 @@ def distance_of_YWB_to_perfect(Y2Y_accuracy, Y2W_accuracy, Y2B_accuracy, W2Y_acc
 #[y2y(1), y2w(0), y2b(0)]
 #[w2y(0), w2w(1), w2b(0)]
 #[b2y(0), b2w(0), b2b(1)]   <- perfect matrix
-
+    
 
 # randomly create training/testing data set
 def create_training_testing_data(df, training_percent, testing_percent):
     df_training = df.sample(frac = training_percent, replace = True)
     df_testing = df.sample(frac = testing_percent, replace = True)
     return df_training, df_testing
+
 
 
