@@ -6,6 +6,8 @@ import time
 from operator import add
 import matplotlib.pyplot as plt
 from operator import add
+import random
+
 
 # transform the className to a unit vector
 def class2unitVector(className):
@@ -462,6 +464,33 @@ def k_nearest_neighbor(df, K):
     return original_race_array, predicted_race_array
 
 
+def knn_predict_unknown(idx, df, K):
+
+    unknown = df.loc[idx]
+    # print("unknown: ", unknown)
+
+    neighborRaceType = []
+    for j in range(0, 2*K+1):
+        if (j == 0): # object itself
+            if (unknown[j][0:2] != "RD"):
+                print("you are NOT predicting RD")
+                break
+
+        elif (j % 2 == 1): # neighbors
+            if unknown[j][0:2] != "RD":
+                neighborRaceType.append(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(unknown[j]))))
+
+    # Randomly put a race in the neighbor list if it's an empty array
+    if len(neighborRaceType) == 0:
+        print("[knn_predict_unknown] Attention, in row ", idx, ", the neighborRaceType is empty, so a race has been chosen randomly from [70, 80, 90]")
+        neighborRaceType.append(random.choice([70, 80, 90]))
+    
+    # get the most frequent element
+    predicted_race = utils_final.getMostFrequentNum(neighborRaceType)
+
+    return predicted_race
+
+
 # get the most frequent element in a list
 def getMostFrequentNum(lst):
     return max(set(lst), key=lst.count)
@@ -497,13 +526,14 @@ def plot_k_vs_accuracy(k_array, accuracy_array):
 
 # predict by K nearest weighted (by distance) neighbor
 def k_weighted_nearest_neighbor(df, K):
+    print("K: ", K)
     original_race_array = []
     predicted_race_array = []
     for i in range(0, df.shape[0]): # 0 ~ 1800
 
         # visualize the process
         clear_output(wait=True)
-        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+        print("Current Progress (K = " , K, "): ", np.round(i/df.shape[0] * 100, 2), "%")
         
         predicted_vector = [0] * 3
         for j in range(0, 2*K+1): # 0 ~ 100
@@ -513,7 +543,7 @@ def k_weighted_nearest_neighbor(df, K):
             else:
                 if (j % 2 == 1): # get classType
                     RaceUnitVector = utils_final.race2unitVector(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j]))))
-                    print(RaceUnitVector)
+                    # print(RaceUnitVector)
                 else: # get distance information
                     distance = df.loc[i][j]
                     if (distance == 0):
@@ -521,7 +551,7 @@ def k_weighted_nearest_neighbor(df, K):
 
                     # add the lists element-wisely 
                     predicted_vector = list( map(add, predicted_vector, [k * (1/distance) for k in RaceUnitVector] ) ) #EX:predicted_vector=[1000,0,0]
-                    print(predicted_vector)
+                    # print(predicted_vector)
 
         # get the max idx in the predicted_result
         # print(predicted_vector)
@@ -535,6 +565,45 @@ def k_weighted_nearest_neighbor(df, K):
         predicted_race_array.append(predicted_race)
 
     return original_race_array, predicted_race_array
+
+def kwnn_predict_unknown(idx, df, K):
+    unknown = df.loc[idx]
+    predicted_vector = [0] * 3
+    RaceUnitVector = []
+    for j in range(0, 2*K+1):
+        # print("j: ", j)
+        if (j == 0): # object itself
+            if (unknown[j][0:2] != "RD"):
+                print("you are NOT predicting RD")
+                break
+        else :
+            if (j % 2 == 1): # neighbors
+                if unknown[j][0:2] == "RD":
+                    continue
+                RaceUnitVector = utils_final.race2unitVector(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(unknown[j]))))
+            else: # get distance information
+                distance = unknown[j]
+                if (distance == 0):
+                    distance = 0.00000001
+
+                # add the lists element-wisely 
+                predicted_vector = list( map(add, predicted_vector, [k * (1/distance) for k in RaceUnitVector] ) ) #EX:predicted_vector=[1000,0,0]
+
+    if predicted_vector == [0]*3 or len(predicted_vector) == 0: # Exception Handler
+        # TODO: uncomment the following line, lot's of problem = = 
+        # print("[kwnn_predict_unknown] When row number = ", j, ", predicted_vector ==", predicted_vector, ", pick a random race as the predicted result")
+        random_race = random.choice([70, 80, 90])
+        predicted_race = random_race
+    else:
+        predicted_race = (predicted_vector.index(max(predicted_vector))) #EX:predicted_race=0
+        if predicted_race == 0: # 0> 70
+            predicted_race = 70
+        elif predicted_race == 1:
+            predicted_race = 80
+        else: 
+            predicted_race = 90
+    return predicted_race
+
 
 
 # predict unknown
