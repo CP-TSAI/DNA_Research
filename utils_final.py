@@ -9,436 +9,7 @@ from operator import add
 import random
 
 
-# transform the className to a unit vector
-def class2unitVector(className):
-
-    # check the status of the string
-    if not className:
-        print("the className is EMPTY in class2unitVector()")
-        time.sleep(5)
-
-
-    className = className.upper()
-
-    lst = [0] * 35
-
-    if(className == "THANA"): 
-        lst[0] = 1;
-    elif(className == "HAN"): 
-        lst[1] = 1;
-    elif(className == "HAN_KO"): 
-        lst[2] = 1;
-    elif(className == "A"): 
-        lst[3] = 1;
-    elif(className == "AMI"): 
-        lst[4] = 1;
-    elif(className == "P"): 
-        lst[5] = 1;
-    elif(className == "PAI"): 
-        lst[6] = 1;
-    elif(className == "BS"): 
-        lst[7] = 1;
-    elif(className == "PUY"): 
-        lst[8] = 1;
-    elif(className == "C"): 
-        lst[9] = 1;
-    elif(className == "TSO"): 
-        lst[10] = 1;
-    elif(className == "T"): 
-        lst[11] = 1;
-    elif(className == "ATA"): 
-        lst[12] = 1;
-    elif(className == "B"): 
-        lst[13] = 1;
-    elif(className == "BUN"): 
-        lst[14] = 1;
-    elif(className == "S"): 
-        lst[15] = 1;
-    elif(className == "SAI"): 
-        lst[16] = 1;
-    elif(className == "L"): 
-        lst[17] = 1;
-    elif(className == "RUK"): 
-        lst[18] = 1;
-    elif(className == "Y"): 
-        lst[19] = 1;
-    elif(className == "TAO"): 
-        lst[20] = 1;
-    elif(className == "AUT"): 
-        lst[21] = 1;
-    elif(className == "EU"): 
-        lst[22] = 1;
-    elif(className == "GER"): 
-        lst[23] = 1;
-    elif(className == "FRENCH"): 
-        lst[24] = 1;
-    elif(className == "J"): 
-        lst[25] = 1;
-    elif(className == "UK"): 
-        lst[26] = 1;
-    elif(className == "HAK"): 
-        lst[27] = 1;
-    elif(className == "PIN"): 
-        lst[28] = 1;
-    elif(className == "JN"): 
-        lst[29] = 1;
-    elif(className == "JQ"): 
-        lst[30] = 1;
-    elif(className == "AY"): 
-        lst[31] = 1;
-    elif(className == "AP"): 
-        lst[32] = 1;
-    elif(className == "KC"): 
-        lst[33] = 1;
-    elif(className == "RCRS"): 
-        lst[34] = 1;
-    else:
-        print("error name in class2unitVector(): ")
-        print("className: ", className)
-        lst[0] = 1;
-        time.sleep(5)
-    return lst
-
-# transform the race to a unit vector
-def race2unitVector(race):
-
-    # check the status of the string
-    if not race:
-        print("the race is EMPTY in race2unitVector()")
-        time.sleep(5)
-
-
-    # race = race.upper()
-
-    lst = [0] * 3
-
-    if(race == 70): 
-        lst[0] = 1;
-    elif(race == 80): 
-        lst[1] = 1;
-    elif(race == 90): 
-        lst[2] = 1;
-    else:
-        print("error name in race2unitVector(): ")
-        print("race: ", race)
-        lst[0] = 1;
-        time.sleep(5)
-    return lst
-
-# if (fullName == EUL603) --> return EUL 
-def fullName2Class(fullName):
-    # print(fullName)
-    # if (fullName[0:4] == "HAN0"): return "HAN0"
-
-
-    fullName = fullName.upper();
-    if (fullName == ".DS_STORE"):
-        fullName = "KC993940";
-
-
-    # fullName_processed = ""
-    # for c in fullName:
-    #     if (c != ' '):
-    #         fullName_processed = fullName_processed + c
-    # fullName = fullName_processed
-
-    # differentiate "HAN" and "HAN_KO"
-    if (fullName[0:3] == "HAN"):
-        if (fullName[-2:] == "KO"):
-            return "HAN_KO"
-        else:
-            return "HAN"
-
-
-    classType = ""
-    for c in fullName: # E, U, L, 6, 0, 3
-        if (c.isalpha()): 
-            classType = classType + c
-        else: 
-            break
-    return classType
-
-# 05/12
-def class2index(className):
-
-    if not className:
-        print("the className is EMPTY in class2index()")
-        time.sleep(20)
-
-    className = className.upper(); 
-
-    if(className == "THANA"): 
-        return 0;
-    elif(className == "HAN"): 
-        return 1;
-    elif(className == "HAN_KO"): 
-        return 2;
-    elif(className == "A"): 
-        return 3;
-    elif(className == "AMI"): 
-        return 4;
-    elif(className == "P"): 
-        return 5;
-    elif(className == "PAI"): 
-        return 6;
-    elif(className == "BS"): 
-        return 7;
-    elif(className == "PUY"): 
-        return 8;
-    elif(className == "C"): 
-        return 9;
-    elif(className == "TSO"): 
-        return 10;
-    elif(className == "T"): 
-        return 11;
-    elif(className == "ATA"): 
-        return 12;
-    elif(className == "B"): 
-        return 13;
-    elif(className == "BUN"): 
-        return 14;
-    elif(className == "S"): 
-        return 15;
-    elif(className == "SAI"): 
-        return 16;
-    elif(className == "L"): 
-        return 17;
-    elif(className == "RUK"): 
-        return 18;
-    elif(className == "Y"): 
-        return 19;
-    elif(className == "TAO"): 
-        return 20;
-    elif(className == "AUT"): 
-        return 21;
-    elif(className == "EU"): 
-        return 22;
-    elif(className == "GER"): 
-        return 23;
-    elif(className == "FRENCH"): 
-        return 24;
-    elif(className == "J"): 
-        return 25;
-    elif(className == "UK"): 
-        return 26;
-    elif(className == "HAK"): 
-        return 27;
-    elif(className == "PIN"): 
-        return 28;
-    elif(className == "JN"): 
-        return 29;
-    elif(className == "JQ"): 
-        return 30;
-    elif(className == "AY"): 
-        return 31;
-    elif(className == "AP"): 
-        return 32;
-    elif(className == "KC"): 
-        return 33;
-    elif(className == "RCRS"): 
-        return 34;
-    else:
-        print("error name in class2index(): ")
-        print("className: ", className)
-        time.sleep(5)
-        return 0;
-
-
-def index2race(index):
-
-    if(index == 0): 
-        return 70;
-    elif(index == 1): 
-        return 70;
-    elif(index == 2): 
-        return 70;
-    elif(index == 3): 
-        return 70;
-    elif(index == 4): 
-        return 70;
-    elif(index == 5): 
-        return 70;
-    elif(index == 6): 
-        return 70;
-    elif(index == 7): 
-        return 70;
-    elif(index == 8): 
-        return 70;
-    elif(index == 9): 
-        return 70;
-    elif(index == 10): 
-        return 70;
-    elif(index == 11): 
-        return 70;
-    elif(index == 12): 
-        return 70;
-    elif(index == 13): 
-        return 70;
-    elif(index == 14): 
-        return 70;
-    elif(index == 15): 
-        return 70;
-    elif(index == 16): 
-        return 70;
-    elif(index == 17): 
-        return 70;
-    elif(index == 18): 
-        return 70;
-    elif(index == 19): 
-        return 70;
-    elif(index == 20): 
-        return 70;
-    elif(index == 21): 
-        return 80;
-    elif(index == 22): 
-        return 90;
-    elif(index == 23): 
-        return 80;
-    elif(index == 24): 
-        return 80;
-    elif(index == 25): 
-        return 70;
-    elif(index == 26): 
-        return 80;
-    elif(index == 27): 
-        return 70;
-    elif(index == 28): 
-        return 70;
-    elif(index == 29): 
-        return 90;
-    elif(index == 30): 
-        return 80;
-    elif(index == 31): 
-        return 80;
-    elif(index == 32): 
-        return 70;
-    elif(index == 33): 
-        return 70;
-    elif(index == 34): 
-        return 80;
-    else:
-        print("error index in index2race(): ")
-        time.sleep(5)
-
-
-
-
-def k_nearest_distance(df, K):
-    original_class_array = []
-    predicted_class_array = []
-
-    original_race_array = []
-    predicted_race_array = []
-
-    for i in range(0, df.shape[0]):
-
-        # visualize the process
-        # clear_output(wait=True)
-        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
-
-        neighborClassType = []
-        original_class = utils_final.class2index(utils_final.fullName2Class(df.loc[i][0]))
-        original_race = utils_final.index2race(original_class)
-
-        original_class_array.append(original_class)
-        original_race_array.append(original_race)
-
-        j = 1
-        cnt = 1
-        previous_distance = df.loc[i][2*j]
-        
-        while (cnt <= K and cnt < 10):
-
-            # MARK: if running out data before we get enough k, errors could happen,
-            # so need to have a size checker
-            if (df.shape[1] <= 2*j+1): break
-
-            if (previous_distance != df.loc[i][2*j]):
-                previous_distance = df.loc[i][2*j]
-                cnt += 1
-            
-            if (cnt <= K):
-                neighborClassType.append(utils_final.class2index(utils_final.fullName2Class(df.loc[i][2*j-1])))
-            j += 1
-
-        
-        # get the most frequent element
-
-        predicted_class = utils_final.getMostFrequentNum(neighborClassType)
-        predict_race = utils_final.index2race(predicted_class)
-
-        predicted_class_array.append(predicted_class)
-        predicted_race_array.append(predict_race)
-
-        # print("neighborClassType: ", neighborClassType)
-        # time.sleep(10)
-
-    return original_class_array, predicted_class_array, original_race_array, predicted_race_array
-
-
-
-
-
-# predict by K nearest weighted (by distance) neighbor
-def k_weighted_nearest_distance(df, K):
-    original_class_array = []
-    predicted_class_array = []
-    for i in range(0, df.shape[0]):
-
-        # visualize the process
-        clear_output(wait=True)
-        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
-        
-        original_class = utils_final.class2index(utils_final.fullName2Class(df.loc[i][0]))
-        original_class_array.append(original_class)
-        j = 1
-        cnt = 1
-        previous_distance = df.loc[i][2*j]
-        predicted_vector = [0] * 35
-
-        while (cnt <= K  and cnt < 10):
-            # MARK: if running out data before we get enough k, errors could happen,
-            # so need to have a size checker
-            if (df.shape[1] <= 2*j+1): break
-
-            if (previous_distance != df.loc[i][2*j]):
-                previous_distance = df.loc[i][2*j]
-                cnt += 1
-
-            classTypeUnitVector = utils_final.class2unitVector(utils_final.fullName2Class(df.loc[i][2*j-1]))
-            distance = df.loc[i][2*j]
-            if (distance == 0):
-                distance = 0.00000001
-
-            # add the lists element-wisely
-            predicted_vector = list( map(add, predicted_vector, [i * (1/distance) for i in classTypeUnitVector] ) )
-            j += 1
-                    
-
-        # get the max idx in the predicted_result
-        # print(predicted_vector)
-        predicted_class = predicted_vector.index(max(predicted_vector))
-        predicted_class_array.append(predicted_class)
-
-
-        
-
-    return original_class_array, predicted_class_array
-
-
-
-
-
-
-
-
-
-
-
-
 # get K neighbors from df (DataFrame)
-###Wrong!!!
-
 def k_nearest_neighbor(df, K):
     original_race_array = []
     predicted_race_array = []
@@ -459,7 +30,7 @@ def k_nearest_neighbor(df, K):
                 neighborRaceType.append(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j]))))   
         
         # get the most frequent element
-        predicted_race = utils_final.getMostFrequentNum(neighborRaceType)
+        predicted_race = utils_final.getMostFrequentElement(neighborRaceType)
         predicted_race_array.append(predicted_race)
     return original_race_array, predicted_race_array
 
@@ -486,42 +57,10 @@ def knn_predict_unknown(idx, df, K):
         neighborRaceType.append(random.choice([70, 80, 90]))
     
     # get the most frequent element
-    predicted_race = utils_final.getMostFrequentNum(neighborRaceType)
+    predicted_race = utils_final.getMostFrequentElement(neighborRaceType)
 
     return predicted_race
 
-
-# get the most frequent element in a list
-def getMostFrequentNum(lst):
-    return max(set(lst), key=lst.count)
-
-
-################################################
-# calculate the accuracy of list1 and list2
-# list1 = [1, 2, 2, 3, 2]   ground truth
-# list2 = [1, 3, 2, 3, 1]   prediction
-def getAccuracyOfTwoLists(lst1, lst2):
-    if (len(lst1) != len(lst2)):
-        print("ERROR!! Lengths of lists are different.")
-
-    accuracy = 0
-    for i in range(0, len(lst1)):
-        if (lst1[i] == lst2[i]):
-            accuracy = accuracy + 1
-
-    if (len(lst1) == 0):
-        print("LENGTH is 0");
-        return 0;
-
-    accuracy = accuracy / len(lst1)
-    return accuracy
-
-
-def plot_k_vs_accuracy(k_array, accuracy_array):
-    plt.plot(k_array, accuracy_array, '-o')
-    plt.xlabel('k value', fontsize=18)
-    plt.ylabel('accuracy', fontsize=16)
-    plt.show()
 
 
 # predict by K nearest weighted (by distance) neighbor
@@ -603,6 +142,492 @@ def kwnn_predict_unknown(idx, df, K):
         else: 
             predicted_race = 90
     return predicted_race
+
+
+def k_nearest_distance(df, K):
+    original_class_array = []
+    predicted_class_array = []
+
+    original_race_array = []
+    predicted_race_array = []
+
+    for i in range(0, df.shape[0]):
+
+        # visualize the process
+        # clear_output(wait=True)
+        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+
+        neighborClassType = []
+        original_class = utils_final.class2index(utils_final.fullName2Class(df.loc[i][0]))
+        original_race = utils_final.index2race(original_class)
+
+        original_class_array.append(original_class)
+        original_race_array.append(original_race)
+
+        j = 1
+        cnt = 1
+        previous_distance = df.loc[i][2*j]
+        
+        while (cnt <= K and cnt < 10):
+
+            # MARK: if running out data before we get enough k, errors could happen,
+            # so need to have a size checker
+            if (df.shape[1] <= 2*j+1): break
+
+            if (previous_distance != df.loc[i][2*j]):
+                previous_distance = df.loc[i][2*j]
+                cnt += 1
+            
+            if (cnt <= K):
+                neighborClassType.append(utils_final.class2index(utils_final.fullName2Class(df.loc[i][2*j-1])))
+            j += 1
+
+        
+        # get the most frequent element
+
+        predicted_class = utils_final.getMostFrequentElement(neighborClassType)
+        predict_race = utils_final.index2race(predicted_class)
+
+        predicted_class_array.append(predicted_class)
+        predicted_race_array.append(predict_race)
+
+        # print("neighborClassType: ", neighborClassType)
+        # time.sleep(10)
+
+    return original_class_array, predicted_class_array, original_race_array, predicted_race_array
+
+
+
+
+
+# predict by K nearest weighted (by distance) neighbor
+def k_weighted_nearest_distance(df, K):
+    original_class_array = []
+    predicted_class_array = []
+    for i in range(0, df.shape[0]):
+
+        # visualize the process
+        clear_output(wait=True)
+        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+        
+        original_class = utils_final.class2index(utils_final.fullName2Class(df.loc[i][0]))
+        original_class_array.append(original_class)
+        j = 1
+        cnt = 1
+        previous_distance = df.loc[i][2*j]
+        predicted_vector = [0] * 35
+
+        while (cnt <= K  and cnt < 10):
+            # MARK: if running out data before we get enough k, errors could happen,
+            # so need to have a size checker
+            if (df.shape[1] <= 2*j+1): break
+
+            if (previous_distance != df.loc[i][2*j]):
+                previous_distance = df.loc[i][2*j]
+                cnt += 1
+
+            classTypeUnitVector = utils_final.class2unitVector(utils_final.fullName2Class(df.loc[i][2*j-1]))
+            distance = df.loc[i][2*j]
+            if (distance == 0):
+                distance = 0.00000001
+
+            # add the lists element-wisely
+            predicted_vector = list( map(add, predicted_vector, [i * (1/distance) for i in classTypeUnitVector] ) )
+            j += 1
+                    
+
+        # get the max idx in the predicted_result
+        # print(predicted_vector)
+        predicted_class = predicted_vector.index(max(predicted_vector))
+        predicted_class_array.append(predicted_class)
+
+    return original_class_array, predicted_class_array
+
+
+
+
+def class2unitVector(className):
+    """
+    Brief: The function transforms the className to a unit vector.
+    :type className: string. Ex: THANA
+    :rtype: List[int].       Ex: [1, 0, 0, ..., 0]
+    """
+
+    # >>> Check the status of the string
+    if not className:
+        print("[class2unitVector] ERROR, the input className is EMPTY: ", className)
+        time.sleep(5)
+
+    # >>> Change all the characters to UPPER
+    className = className.upper()
+
+
+    # >>> Generate a unit vector based on the input className
+    lst = [0] * 35
+
+    if(className == "THANA"): 
+        lst[0] = 1;
+    elif(className == "HAN"): 
+        lst[1] = 1;
+    elif(className == "HAN_KO"): 
+        lst[2] = 1;
+    elif(className == "A"): 
+        lst[3] = 1;
+    elif(className == "AMI"): 
+        lst[4] = 1;
+    elif(className == "P"): 
+        lst[5] = 1;
+    elif(className == "PAI"): 
+        lst[6] = 1;
+    elif(className == "BS"): 
+        lst[7] = 1;
+    elif(className == "PUY"): 
+        lst[8] = 1;
+    elif(className == "C"): 
+        lst[9] = 1;
+    elif(className == "TSO"): 
+        lst[10] = 1;
+    elif(className == "T"): 
+        lst[11] = 1;
+    elif(className == "ATA"): 
+        lst[12] = 1;
+    elif(className == "B"): 
+        lst[13] = 1;
+    elif(className == "BUN"): 
+        lst[14] = 1;
+    elif(className == "S"): 
+        lst[15] = 1;
+    elif(className == "SAI"): 
+        lst[16] = 1;
+    elif(className == "L"): 
+        lst[17] = 1;
+    elif(className == "RUK"): 
+        lst[18] = 1;
+    elif(className == "Y"): 
+        lst[19] = 1;
+    elif(className == "TAO"): 
+        lst[20] = 1;
+    elif(className == "AUT"): 
+        lst[21] = 1;
+    elif(className == "EU"): 
+        lst[22] = 1;
+    elif(className == "GER"): 
+        lst[23] = 1;
+    elif(className == "FRENCH"): 
+        lst[24] = 1;
+    elif(className == "J"): 
+        lst[25] = 1;
+    elif(className == "UK"): 
+        lst[26] = 1;
+    elif(className == "HAK"): 
+        lst[27] = 1;
+    elif(className == "PIN"): 
+        lst[28] = 1;
+    elif(className == "JN"): 
+        lst[29] = 1;
+    elif(className == "JQ"): 
+        lst[30] = 1;
+    elif(className == "AY"): 
+        lst[31] = 1;
+    elif(className == "AP"): 
+        lst[32] = 1;
+    elif(className == "KC"): 
+        lst[33] = 1;
+    elif(className == "RCRS"): 
+        lst[34] = 1;
+    else:
+        print("[class2unitVector] ERROR, please check the className: ", className)
+        print("[class2unitVector] A random unit vector has been created to return")
+        lst[0] = 1;
+        time.sleep(5)
+    return lst
+
+
+def race2unitVector(race):
+    """
+    Brief: The function transforms the RACE to a UNIT VECTOR
+    :type race: int.   Ex: 70/80/90
+    :rtype: List[int]. Ex: [1, 0, 0]
+    """
+
+    # check the status of the string
+    if not race:
+        print("[race2unitVector] ERROR, the input race is EMPTY: ", race)
+        time.sleep(5)
+
+    lst = [0] * 3
+
+    if(race == 70): 
+        lst[0] = 1;
+    elif(race == 80): 
+        lst[1] = 1;
+    elif(race == 90): 
+        lst[2] = 1;
+    else:
+        print("[race2unitVector] ERROR race: ", race)
+        print("[race2unitVector] A random unit vector has been created to return")
+        lst[0] = 1;
+        time.sleep(5)
+    return lst
+
+
+def fullName2Class(fullName):
+    """
+    Brief: The function transforms the FULLNAME to CLASS
+    :type fullName: string.   Ex: "EUL603"
+    :rtype: string.           Ex: "EUL"
+    """
+    # print(fullName)
+    # if (fullName[0:4] == "HAN0"): return "HAN0"
+
+    # >>> Change the characters to UPPER
+    fullName = fullName.upper();
+
+    # >>> Some weird shit in the system, how did we get this name???
+    if (fullName == ".DS_STORE"):
+        fullName = "KC993940";
+
+
+    # fullName_processed = ""
+    # for c in fullName:
+    #     if (c != ' '):
+    #         fullName_processed = fullName_processed + c
+    # fullName = fullName_processed
+
+    # >>> Differentiate "HAN" and "HAN_KO"
+    if (fullName[0:3] == "HAN"):
+        if (fullName[-2:] == "KO"):
+            return "HAN_KO"
+        else:
+            return "HAN"
+
+
+    classType = ""
+    for c in fullName: # E, U, L, 6, 0, 3
+        if (c.isalpha()): 
+            classType = classType + c
+        else: 
+            break
+    return classType
+
+
+def class2index(className):
+    """
+    Brief: The function transforms the CLASS to INDEX
+    :type className: string.  Ex: "EUL"
+    :rtype: int.              Ex: 1
+    """
+
+    if not className:
+        print("[class2index] ERROR, the className is EMPTY: ", className)
+        time.sleep(5)
+
+    className = className.upper(); 
+
+    if(className == "THANA"): 
+        return 0;
+    elif(className == "HAN"): 
+        return 1;
+    elif(className == "HAN_KO"): 
+        return 2;
+    elif(className == "A"): 
+        return 3;
+    elif(className == "AMI"): 
+        return 4;
+    elif(className == "P"): 
+        return 5;
+    elif(className == "PAI"): 
+        return 6;
+    elif(className == "BS"): 
+        return 7;
+    elif(className == "PUY"): 
+        return 8;
+    elif(className == "C"): 
+        return 9;
+    elif(className == "TSO"): 
+        return 10;
+    elif(className == "T"): 
+        return 11;
+    elif(className == "ATA"): 
+        return 12;
+    elif(className == "B"): 
+        return 13;
+    elif(className == "BUN"): 
+        return 14;
+    elif(className == "S"): 
+        return 15;
+    elif(className == "SAI"): 
+        return 16;
+    elif(className == "L"): 
+        return 17;
+    elif(className == "RUK"): 
+        return 18;
+    elif(className == "Y"): 
+        return 19;
+    elif(className == "TAO"): 
+        return 20;
+    elif(className == "AUT"): 
+        return 21;
+    elif(className == "EU"): 
+        return 22;
+    elif(className == "GER"): 
+        return 23;
+    elif(className == "FRENCH"): 
+        return 24;
+    elif(className == "J"): 
+        return 25;
+    elif(className == "UK"): 
+        return 26;
+    elif(className == "HAK"): 
+        return 27;
+    elif(className == "PIN"): 
+        return 28;
+    elif(className == "JN"): 
+        return 29;
+    elif(className == "JQ"): 
+        return 30;
+    elif(className == "AY"): 
+        return 31;
+    elif(className == "AP"): 
+        return 32;
+    elif(className == "KC"): 
+        return 33;
+    elif(className == "RCRS"): 
+        return 34;
+    else:
+        print("[class2index] ERROR, the input className: ", className)
+        print("[class2index] A random number has been chosen to return")
+        time.sleep(5)
+        return 0;
+
+
+def index2race(index):
+    """
+    Brief: The function transforms the INDEX to RACE
+    :type index: int.  Ex: 0/1/2/.../34
+    :rtype: int.       Ex: 70/80/90
+    """
+
+    if(index == 0): 
+        return 70;
+    elif(index == 1): 
+        return 70;
+    elif(index == 2): 
+        return 70;
+    elif(index == 3): 
+        return 70;
+    elif(index == 4): 
+        return 70;
+    elif(index == 5): 
+        return 70;
+    elif(index == 6): 
+        return 70;
+    elif(index == 7): 
+        return 70;
+    elif(index == 8): 
+        return 70;
+    elif(index == 9): 
+        return 70;
+    elif(index == 10): 
+        return 70;
+    elif(index == 11): 
+        return 70;
+    elif(index == 12): 
+        return 70;
+    elif(index == 13): 
+        return 70;
+    elif(index == 14): 
+        return 70;
+    elif(index == 15): 
+        return 70;
+    elif(index == 16): 
+        return 70;
+    elif(index == 17): 
+        return 70;
+    elif(index == 18): 
+        return 70;
+    elif(index == 19): 
+        return 70;
+    elif(index == 20): 
+        return 70;
+    elif(index == 21): 
+        return 80;
+    elif(index == 22): 
+        return 90;
+    elif(index == 23): 
+        return 80;
+    elif(index == 24): 
+        return 80;
+    elif(index == 25): 
+        return 70;
+    elif(index == 26): 
+        return 80;
+    elif(index == 27): 
+        return 70;
+    elif(index == 28): 
+        return 70;
+    elif(index == 29): 
+        return 90;
+    elif(index == 30): 
+        return 80;
+    elif(index == 31): 
+        return 80;
+    elif(index == 32): 
+        return 70;
+    elif(index == 33): 
+        return 70;
+    elif(index == 34): 
+        return 80;
+    else:
+        print("[index2race] ERROR, the input index is not existed: ", index)
+        time.sleep(5)
+
+
+def getMostFrequentElement(lst):
+    """
+    Brief: The function returns the most frequent element in a list
+    :type lst: List[].  Ex: ["a", "b", "c", "a"]
+    :rtype: ?.          Ex: "a"
+    """
+    return max(set(lst), key=lst.count)
+
+
+def getAccuracyOfTwoLists(lst1, lst2):
+    """
+    Brief: The function calculates the accuracy (or similarity) of list1 and list2
+    :type lst1: List[].  Ex: [1, 2, 3, 1] (ground truth)
+    :type lst2: List[].  Ex: [2, 2, 3, 1] (prediction)
+    :rtype: int.          Ex: 0.75
+    """
+    if (len(lst1) != len(lst2)):
+        print("[getAccuracyOfTwoLists] ERROR!! Different lenth. len(lst1): ", len(lst1), ", len(lst2): ", len(lst2))
+        return 0
+    
+    if (len(lst1) == 0):
+        print("[getAccuracyOfTwoLists] LENGTH of list is 0");
+        return 0;
+
+    # >>> calculate the accuracy (or similarity)
+    accuracy = 0
+    for i in range(0, len(lst1)):
+        if (lst1[i] == lst2[i]):
+            accuracy = accuracy + 1
+
+    accuracy = accuracy / len(lst1)
+    return accuracy
+
+
+def plot_k_vs_accuracy(k_array, accuracy_array):
+    """
+    Brief: The function plots the graph: k value vs accuracy
+    :type k_array: List[].         Ex: [1, 2, 3, 4]
+    :type accuracy_array: List[].  Ex: [0.9, 0.4, 0.8, 0.95]
+    :rtype: None.
+    """
+    plt.plot(k_array, accuracy_array, '-o')
+    plt.xlabel('k value', fontsize=18)
+    plt.ylabel('accuracy', fontsize=16)
+    plt.show()
 
 
 
@@ -688,37 +713,37 @@ def subpop2unitVector(className):
 
     lst = [0] * 16
 
-    if(className == "THANA" or className == "HAN" or className == "HAN_KO"): 
+    if(className == "THANA" or className == "HAN" or className == "HAN_KO"): # Asian
         lst[0] = 1;
-    elif(className == "A" or className == "AMI"): 
+    elif(className == "A" or className == "AMI"): # Asian
         lst[1] = 1;
-    elif(className == "P" or className == "PAI"): 
+    elif(className == "P" or className == "PAI"): # Asian
         lst[2] = 1;
-    elif(className == "BS" or className == "PUY"): 
+    elif(className == "BS" or className == "PUY"): # Asian
         lst[3] = 1;
-    elif(className == "C" or className == "TSO"): 
+    elif(className == "C" or className == "TSO"): # Asian
         lst[4] = 1;
-    elif(className == "T" or className == "ATA"): 
+    elif(className == "T" or className == "ATA"): # Asian
         lst[5] = 1;
-    elif(className == "B" or className == "BUN"): 
+    elif(className == "B" or className == "BUN"): # Asian
         lst[6] = 1;
-    elif(className == "S" or className == "SAI"): 
+    elif(className == "S" or className == "SAI"): # Asian
         lst[7] = 1;
-    elif(className == "L" or className == "RUK"): 
+    elif(className == "L" or className == "RUK"): # Asian
         lst[8] = 1;
-    elif(className == "Y" or className =="TAO"): 
+    elif(className == "Y" or className =="TAO"): # Asian
         lst[9] = 1;
-    elif(className == "HAK"): 
+    elif(className == "HAK"): # Asian
         lst[10] = 1;
-    elif(className == "PIN"): 
+    elif(className == "PIN"): # Asian
         lst[11] = 1;
     elif(className == "J" or className == "AP"): 
         lst[12] = 1;
-    elif(className == "KC"): 
+    elif(className == "KC"): # Asian
         lst[13] = 1;
-    elif(className == "EU" or className == "JN"): 
+    elif(className == "EU" or className == "JN"): # Black
         lst[14] = 1;
-    elif(className == "AUT" or className == "GER" or className == "FRENCH" or className == "UK" or className == "JQ" or className == "AY" or className == "RCRS"): 
+    elif(className == "AUT" or className == "GER" or className == "FRENCH" or className == "UK" or className == "JQ" or className == "AY" or className == "RCRS"): # White
         lst[15] = 1;
     
     else:
@@ -842,7 +867,7 @@ def distance_threshold_clustering(df, distance_threshold):
                 break; 
         
         # get the most frequent element
-        predicted_race = utils_final.getMostFrequentNum(neighborRaceType)
+        predicted_race = utils_final.getMostFrequentElement(neighborRaceType)
         predicted_race_array.append(predicted_race)
 
     (Y2Y, Y2W, Y2B, W2Y, W2W, W2B, B2Y, B2W, B2B) = analyze_indivudual_race_accuracy(original_race_array, predicted_race_array)
@@ -851,10 +876,13 @@ def distance_threshold_clustering(df, distance_threshold):
 
 
 
-# original_class_array: [70, 70, 80, 90, ...]
-# predicted_class_array: [70, 80, 90, 90, ...]
-# return: (Y2Y, Y2W, Y2B, W2Y, W2W, W2B, B2Y, B2W, B2B)
 def analyze_individual_race_accuracy(original_race_array, predicted_race_array):
+    """
+    Brief: The function plots the graph: k value vs accuracy
+    :type original_race_array : List[].   Ex: [70, 70, 80, 90, ...]
+    :type predicted_race_array: List[].   Ex: [70, 80, 90, 90, ...]
+    :rtype accuracy_array:       List[].   Ex: [Y2Y, Y2W, Y2B, W2Y, W2W, W2B, B2Y, B2W, B2B]
+    """
     number_of_70 = 0;
     number_of_80 = 0;
     number_of_90 = 0;
