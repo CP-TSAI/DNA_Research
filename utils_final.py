@@ -106,6 +106,14 @@ def k_weighted_nearest_neighbor(df, K):
     return original_race_array, predicted_race_array
 
 def kwnn_predict_unknown(idx, df, K):
+    """
+    Brief: The function predicts the unknown (pointed by idx in df) by KWNN.
+    :type idx            : int. The row index for DataFrame.
+    :type df             : int. The DataFrame.
+    :type K              : int. The number of the neighbors.
+    :rtype predicted_race: int. Ex: 70/80/90
+    """
+
     unknown = df.loc[idx]
     predicted_vector = [0] * 3
     RaceUnitVector = []
@@ -113,13 +121,19 @@ def kwnn_predict_unknown(idx, df, K):
         # print("j: ", j)
         if (j == 0): # object itself
             if (unknown[j][0:2] != "RD"):
-                print("you are NOT predicting RD")
+                print("[kwnn_predict_unknown] You are NOT predicting RD")
+                time.sleep(10)
                 break
         else :
             if (j % 2 == 1): # neighbors
                 if unknown[j][0:2] == "RD":
-                    continue
-                RaceUnitVector = utils_final.race2unitVector(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(unknown[j]))))
+                    # >>> Method 1: since "RD" is unknown, we can just skip
+                    # continue
+                    
+                    # >>> Method 2: we know "RD" is [0, 1, 0], just use the result
+                    RaceUnitVector = [0, 1, 0]
+                else:
+                    RaceUnitVector = utils_final.race2unitVector(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(unknown[j]))))
             else: # get distance information
                 distance = unknown[j]
                 if (distance == 0):
@@ -134,8 +148,8 @@ def kwnn_predict_unknown(idx, df, K):
         random_race = random.choice([70, 80, 90])
         predicted_race = random_race
     else:
-        predicted_race = (predicted_vector.index(max(predicted_vector))) #EX:predicted_race=0
-        if predicted_race == 0: # 0> 70
+        predicted_race = (predicted_vector.index(max(predicted_vector))) # Get the max index in predicted_vector, ex: predicted_vector = [1, 2, 3], the max index is 2
+        if predicted_race == 0:
             predicted_race = 70
         elif predicted_race == 1:
             predicted_race = 80
