@@ -11,6 +11,7 @@ import random
 
 # get K neighbors from df (DataFrame)
 def k_nearest_neighbor(df, K):
+    # ------- return race (70, 80, 90)
     original_race_array = []
     predicted_race_array = []
     for i in range(0, df.shape[0]):
@@ -20,7 +21,7 @@ def k_nearest_neighbor(df, K):
         # print(i)
         
         neighborRaceType = []
-        for j in range(0, 2*K+1):
+        for j in range(0, 2*K+1): # 0, 1, 2, 3, 4, 5, 6
             if (j == 0): # object itself
                 original_race = utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j])))
                 original_race_array.append(original_race)
@@ -33,6 +34,35 @@ def k_nearest_neighbor(df, K):
         predicted_race = utils_final.getMostFrequentElement(neighborRaceType)
         predicted_race_array.append(predicted_race)
     return original_race_array, predicted_race_array
+
+
+
+    # # ---- return subpopulation
+    # original_class_array = []
+    # predicted_class_array = []
+    # for i in range(0, df.shape[0]):
+    #     # visualize the process
+    #     clear_output(wait=True)
+    #     print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+    #     # print(i)
+        
+    #     neighborRaceType = []
+    #     for j in range(0, 2*K+1): # 0, 1, 2, 3, 4, 5, 6
+    #         if (j == 0): # object itself
+    #             original_class = utils_final.class2index(utils_final.fullName2Class(df.loc[i][j]))
+    #             original_class_array.append(original_class)
+    #         elif (j % 2 == 1): # neighbors
+    #             # print("j: ", j)
+    #             # print("df.loc[i][j]: ", df.loc[i][j])
+    #             neighborRaceType.append(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j])))
+        
+    #     # get the most frequent element
+    #     predicted_class = utils_final.getMostFrequentElement(neighborRaceType)
+    #     predicted_class_array.append(predicted_class)
+    # return original_class_array, predicted_class_array
+
+
+    
 
 
 def knn_predict_unknown(idx, df, K):
@@ -511,7 +541,7 @@ def class2index(className):
     else:
         print("[class2index] ERROR, the input className: ", className)
         print("[class2index] A random number has been chosen to return")
-        time.sleep(5)
+        # time.sleep(5)
         return 0;
 
 
@@ -603,6 +633,7 @@ def getMostFrequentElement(lst):
     :type lst: List[].  Ex: ["a", "b", "c", "a"]
     :rtype: ?.          Ex: "a"
     """
+    # TODO: what if the frequency is the same, ex: [2, 3], which one should i return?
     return max(set(lst), key=lst.count)
 
 
@@ -611,7 +642,7 @@ def getAccuracyOfTwoLists(lst1, lst2):
     Brief: The function calculates the accuracy (or similarity) of list1 and list2
     :type lst1: List[].  Ex: [1, 2, 3, 1] (ground truth)
     :type lst2: List[].  Ex: [2, 2, 3, 1] (prediction)
-    :rtype: int.          Ex: 0.75
+    :rtype: int.         Ex: 0.75
     """
     if (len(lst1) != len(lst2)):
         print("[getAccuracyOfTwoLists] ERROR!! Different lenth. len(lst1): ", len(lst1), ", len(lst2): ", len(lst2))
