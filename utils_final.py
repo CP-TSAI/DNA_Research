@@ -14,14 +14,14 @@ def k_nearest_neighbor(df, K):
     # ------- return race (70, 80, 90)
     original_race_array = []
     predicted_race_array = []
-    for i in range(0, df.shape[0]):
+    for i in range(0, df.shape[0]): #df.shape[0]is column(->)
         # visualize the process
         clear_output(wait=True)
         print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
         # print(i)
         
         neighborRaceType = []
-        for j in range(0, 2*K+1): # 0, 1, 2, 3, 4, 5, 6
+        for j in range(0, 2*K+1): # row(|), ex.0, 1, 2, 3, 4, 5, 6
             if (j == 0): # object itself
                 original_race = utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j])))
                 original_race_array.append(original_race)
@@ -88,7 +88,7 @@ def knn_predict_unknown(idx, df, K):
     
     # get the most frequent element
     predicted_race = utils_final.getMostFrequentElement(neighborRaceType)
-
+    print("neighborRaceType:",neighborRaceType)
     return predicted_race
 
 
@@ -634,6 +634,7 @@ def getMostFrequentElement(lst):
     :rtype: ?.          Ex: "a"
     """
     # TODO: what if the frequency is the same, ex: [2, 3], which one should i return?
+    #-> minimum positive number
     return max(set(lst), key=lst.count)
 
 
@@ -747,6 +748,165 @@ def predict_subpop(unknown, d_star):
 # print(result);
 
 #---------------------------
+def k_nearest_neighbor_4_subpop(df, K):
+    # ------- return race (70, 80, 90)
+    original_subpop_array = []
+    predicted_subpop_array = []
+    for i in range(0, df.shape[0]): #df.shape[0]is column(->)
+        # visualize the process
+        clear_output(wait=True)
+        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+        # print(i)
+        
+        neighborSubpopType = []
+        for j in range(0, 2*K+1): # row(|), ex.0, 1, 2, 3, 4, 5, 6
+            if (j == 0): # object itself
+                original_subpop = utils_final.class2subpop(utils_final.fullName2Class(df.loc[i][j]))
+                original_subpop_array.append(original_subpop)
+            elif (j % 2 == 1): # neighbors
+                # print("j: ", j)
+                # print("df.loc[i][j]: ", df.loc[i][j])
+                neighborSubpopType.append(utils_final.class2subpop(utils_final.fullName2Class(df.loc[i][j])))
+        
+        # get the most frequent element
+        predicted_subpop = utils_final.getMostFrequentElement(neighborSubpopType)
+        predicted_subpop_array.append(predicted_subpop)
+    return original_subpop_array, predicted_subpop_array
+
+def class2subpop(className):
+    """
+    Brief: The function transforms the CLASS to subpop
+    :type className: string.  Ex: "EUL"
+    :rtype: int.              Ex: 300
+    """
+    if not className:
+        print("[class2subpop] ERROR, the className is EMPTY: ", className)
+        time.sleep(5)
+
+    className = className.upper(); 
+
+    if(className == "THANA" or className == "HAN" or className == "HAN_KO"): 
+        return 110;
+    elif(className == "HAK"): 
+        return 111;
+    elif(className == "A" or className == "AMI"): 
+        return 101;
+    elif(className == "P" or className == "PAI"): 
+        return 102;
+    elif(className == "BS" or className == "PUY"): 
+        return 103;
+    elif(className == "C" or className == "TSO"): 
+        return 104;
+    elif(className == "T" or className == "ATA"): 
+        return 105;
+    elif(className == "B" or className == "BUN"): 
+        return 106;
+    elif(className == "S" or className == "SAI"): 
+        return 107;
+    elif(className == "L" or className == "RUK"): 
+        return 108;
+    elif(className == "Y" or className =="TAO"): 
+        return 109;
+    elif(className == "PIN"): 
+        return 100;
+    elif(className == "J" or className == "AP"): 
+        return 112;
+    elif(className == "KC"): 
+        return 113;
+    elif(className == "EU" or className == "JN"): 
+        return 90;
+    elif(className == "AUT" or className == "GER" or className == "FRENCH" or className == "UK" or className == "JQ" or className == "AY" or className == "RCRS"): 
+        return 80;
+    else:
+        print("[class2subpop] ERROR, the input className: ", className)
+        print("[class2subpop] A random number has been chosen to return")
+        # time.sleep(5)
+        return 0;
+
+def k_weighted_nearest_neighbor_4_subpop(df, K):
+    print("K: ", K)
+    original_subpop_array = []
+    predicted_subpop_array = []
+    for i in range(0, df.shape[0]): # 0 ~ 1800(0, df.shape[0])
+
+        # visualize the process
+        clear_output(wait=True)
+        print("Current Progress (K = " , K, "): ", np.round(i/df.shape[0] * 100, 2), "%")
+        
+        predicted_vector = [0] * 16
+        for j in range(0, 2*K+1): # 0 ~ 100
+            if (j == 0): 
+                original_subpop = utils_final.class2subpop(utils_final.fullName2Class(df.loc[i][j])) #EX:110
+                original_subpop_array.append(original_subpop)
+            else:
+                if (j % 2 == 1): # get classType
+                    RaceUnitVector = utils_final.subpop2unitVector(utils_final.fullName2Class(df.loc[i][j]))
+                    # print(RaceUnitVector)
+                else: # get distance information
+                    distance = df.loc[i][j]
+                    if (distance == 0):
+                        distance = 0.00000001
+
+                    # add the lists element-wisely 
+                    predicted_vector = list( map(add, predicted_vector, [k * (1/distance) for k in RaceUnitVector] ) ) #EX:predicted_vector=[1000,0,0]
+                    # print(predicted_vector)
+
+        # get the max idx in the predicted_result
+        #print(predicted_vector)
+        predicted_subpop = (predicted_vector.index(max(predicted_vector))) #EX:predicted_race=0 
+        if predicted_subpop == 0: # 0> 70
+            predicted_subpop = 110
+        elif predicted_subpop == 1:
+            predicted_subpop = 101
+        elif predicted_subpop == 2:
+            predicted_subpop = 102
+        elif predicted_subpop == 3:
+            predicted_subpop = 103
+        elif predicted_subpop == 4:
+            predicted_subpop = 104
+        elif predicted_subpop == 5:
+            predicted_subpop = 105
+        elif predicted_subpop == 6:
+            predicted_subpop = 106
+        elif predicted_subpop == 7:
+            predicted_subpop = 107
+        elif predicted_subpop == 8:
+            predicted_subpop = 108
+        elif predicted_subpop == 9:
+            predicted_subpop = 109
+        elif predicted_subpop == 10:
+            predicted_subpop = 111
+        elif predicted_subpop == 11:
+            predicted_subpop = 100
+        elif predicted_subpop == 12:
+            predicted_subpop = 112
+        elif predicted_subpop == 13:
+            predicted_subpop = 113
+        elif predicted_subpop == 14:
+            predicted_subpop = 90
+        else: predicted_subpop = 80
+
+        predicted_subpop_array.append(predicted_subpop)
+
+    return original_subpop_array, predicted_subpop_array
+
+
+def subpop_asian(lst1,lst2):
+    count=0
+    num=len(lst1)
+    for i in range(0,len(lst1)):
+        if lst1[i]==80 or lst1[i]==90:
+            num=num-1
+        else:
+            if lst1[i]==lst2[i]:
+                count=count+1
+    #print("asian_subpop_count=",count)
+    #print("asian_subpop_length =",num)
+    asian_subpop=count/num
+    return asian_subpop
+
+
+
 def subpop2unitVector(className):
 
     # check the status of the string
@@ -1037,6 +1197,172 @@ def create_training_testing_data(df, training_percent, testing_percent):
     df_training = df.sample(frac = training_percent, replace = True)
     df_testing = df.sample(frac = testing_percent, replace = True)
     return df_training, df_testing
+
+#-------Assigned specific sample-------
+
+# get K neighbors from df (DataFrame)
+def k_nearest_neighbor_specific(df, K):
+    # ------- return race (70, 80, 90)
+    original_race_array = []
+    predicted_race_array = []
+    for i in range(0,1): #df.shape[0]is column(->)
+        # visualize the process
+        clear_output(wait=True)
+        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+        # print(i)
+        
+        neighborRaceType = []
+        for j in range(0, 2*K+1): # row(|), ex.0, 1, 2, 3, 4, 5, 6
+            if (j == 0): # object itself
+                original_race = utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j])))
+                original_race_array.append(original_race)
+            elif (j % 2 == 1): # neighbors
+                # print("j: ", j)
+                # print("df.loc[i][j]: ", df.loc[i][j])
+                neighborRaceType.append(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j]))))   
+        
+        # get the most frequent element
+        print("neighborRaceType:" ,neighborRaceType)
+        predicted_race = utils_final.getMostFrequentElement(neighborRaceType)
+        predicted_race_array.append(predicted_race)
+    return original_race_array, predicted_race_array
+
+
+def k_weighted_nearest_neighbor_specific(df, K):
+    print("K: ", K)
+    original_race_array = []
+    predicted_race_array = []
+    for i in range(0, 1): # 0 ~ 1800
+
+        # visualize the process
+        clear_output(wait=True)
+        print("Current Progress (K = " , K, "): ", np.round(i/df.shape[0] * 100, 2), "%")
+        
+        predicted_vector = [0] * 3
+        for j in range(0, 2*K+1): # 0 ~ 100
+            if (j == 0): 
+                original_race = utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j]))) #EX:70
+                original_race_array.append(original_race)
+            else:
+                if (j % 2 == 1): # get classType
+                    RaceUnitVector = utils_final.race2unitVector(utils_final.index2race(utils_final.class2index(utils_final.fullName2Class(df.loc[i][j]))))
+                    # print(RaceUnitVector)
+                else: # get distance information
+                    distance = df.loc[i][j]
+                    if (distance == 0):
+                        distance = 0.00000001
+
+                    # add the lists element-wisely 
+                    predicted_vector = list( map(add, predicted_vector, [k * (1/distance) for k in RaceUnitVector] ) ) #EX:predicted_vector=[1000,0,0]
+                    # print(predicted_vector)
+        print("neighborRaceType:" ,predicted_vector)
+
+        # get the max idx in the predicted_result
+        # print(predicted_vector)
+        predicted_race = (predicted_vector.index(max(predicted_vector))) #EX:predicted_race=0 
+        if predicted_race == 0: # 0> 70
+            predicted_race = 70
+        elif predicted_race == 1:
+            predicted_race = 80
+        else: predicted_race = 90
+
+        predicted_race_array.append(predicted_race)
+
+    return original_race_array, predicted_race_array
+
+
+def knn_4_specific_subpop(df, K):
+    # ------- return race (70, 80, 90)
+    original_subpop_array = []
+    predicted_subpop_array = []
+    for i in range(0, 1): #df.shape[0]is column(->)
+        # visualize the process
+        clear_output(wait=True)
+        print("Current Progress: ", np.round(i/df.shape[0] * 100, 2), "%")
+        # print(i)
+        
+        neighborSubpopType = []
+        for j in range(0, 2*K+1): # row(|), ex.0, 1, 2, 3, 4, 5, 6
+            if (j == 0): # object itself
+                original_subpop = utils_final.class2subpop(utils_final.fullName2Class(df.loc[i][j]))
+                original_subpop_array.append(original_subpop)
+            elif (j % 2 == 1): # neighbors
+                # print("j: ", j)
+                # print("df.loc[i][j]: ", df.loc[i][j])
+                neighborSubpopType.append(utils_final.class2subpop(utils_final.fullName2Class(df.loc[i][j])))
+        
+        # get the most frequent element
+        print(neighborSubpopType)
+        predicted_subpop = utils_final.getMostFrequentElement(neighborSubpopType)
+        predicted_subpop_array.append(predicted_subpop)
+    return original_subpop_array, predicted_subpop_array
+
+def kwnn_4_specific_subpop(df, K):
+    print("K: ", K)
+    original_subpop_array = []
+    predicted_subpop_array = []
+    for i in range(0, 1): # 0 ~ 1800(0, df.shape[0])
+
+        # visualize the process
+        clear_output(wait=True)
+        print("Current Progress (K = " , K, "): ", np.round(i/df.shape[0] * 100, 2), "%")
+        
+        predicted_vector = [0] * 16
+        for j in range(0, 2*K+1): # 0 ~ 100
+            if (j == 0): 
+                original_subpop = utils_final.class2subpop(utils_final.fullName2Class(df.loc[i][j])) #EX:110
+                original_subpop_array.append(original_subpop)
+            else:
+                if (j % 2 == 1): # get classType
+                    RaceUnitVector = utils_final.subpop2unitVector(utils_final.fullName2Class(df.loc[i][j]))
+                    # print(RaceUnitVector)
+                else: # get distance information
+                    distance = df.loc[i][j]
+                    if (distance == 0):
+                        distance = 0.00000001
+
+                    # add the lists element-wisely 
+                    predicted_vector = list( map(add, predicted_vector, [k * (1/distance) for k in RaceUnitVector] ) ) #EX:predicted_vector=[1000,0,0]
+                    # print(predicted_vector)
+
+        # get the max idx in the predicted_result
+        print(predicted_vector)
+        predicted_subpop = (predicted_vector.index(max(predicted_vector))) #EX:predicted_race=0 
+        if predicted_subpop == 0: # 0> 70
+            predicted_subpop = 110
+        elif predicted_subpop == 1:
+            predicted_subpop = 101
+        elif predicted_subpop == 2:
+            predicted_subpop = 102
+        elif predicted_subpop == 3:
+            predicted_subpop = 103
+        elif predicted_subpop == 4:
+            predicted_subpop = 104
+        elif predicted_subpop == 5:
+            predicted_subpop = 105
+        elif predicted_subpop == 6:
+            predicted_subpop = 106
+        elif predicted_subpop == 7:
+            predicted_subpop = 107
+        elif predicted_subpop == 8:
+            predicted_subpop = 108
+        elif predicted_subpop == 9:
+            predicted_subpop = 109
+        elif predicted_subpop == 10:
+            predicted_subpop = 111
+        elif predicted_subpop == 11:
+            predicted_subpop = 100
+        elif predicted_subpop == 12:
+            predicted_subpop = 112
+        elif predicted_subpop == 13:
+            predicted_subpop = 113
+        elif predicted_subpop == 14:
+            predicted_subpop = 90
+        else: predicted_subpop = 80
+
+        predicted_subpop_array.append(predicted_subpop)
+
+    return original_subpop_array, predicted_subpop_array
 
 
 
